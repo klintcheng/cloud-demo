@@ -1,0 +1,37 @@
+---
+logging:
+  level:
+    org.springframework.cloud.consul: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    consul:
+      discovery:
+        enabled: true
+        healthCheckInterval: 10s
+        healthCheckPath: /actuator/health
+        ip-address: ${GATEWAY_HOST:192.168.10.7}
+        prefer-ip-address: true
+        register: true
+        service-name: gateway-service
+      host: 100.65.49.16
+      port: 8500
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - filters:
+            - RewritePath=/serviceuser/(?<segment>.*), /${segment}
+          id: service-user
+          predicates:
+            - Path=/serviceuser/users/**
+          uri: lb://service-user

@@ -1,0 +1,35 @@
+---
+server:
+  port: 8081
+spring:
+  application:
+    name: service-user
+  cloud:
+    consul:
+      discovery:
+        enabled: true
+        healthCheckInterval: 10s
+        healthCheckPath: /actuator/health
+        ip-address: ${GATEWAY_HOST:192.168.10.7}
+        register: true
+        service-name: service-user
+      host: 100.65.49.16
+      port: 8500
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: kai2088go
+    url: jdbc:mysql://100.65.49.16:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+  mybatis:
+    configuration:
+      map-underscore-to-camel-case: true
+springdoc:
+  api-docs:
+    enabled: true
+  info:
+    description: 这是一个 Spring Boot + MyBatis 3 的用户服务 API 文档
+    title: 用户服务 API
+    version: 1.0.0
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html    # mapper-locations: classpath:mapper/*.xml
