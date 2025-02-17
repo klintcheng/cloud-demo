@@ -14,15 +14,19 @@ spring:
     name: gateway-service
   cloud:
     consul:
+      config:
+        enabled: true
+        format: YAML
+        profileSeparator: .
       discovery:
         enabled: true
         healthCheckInterval: 10s
         healthCheckPath: /actuator/health
-        ip-address: ${GATEWAY_HOST:192.168.10.7}
+        # ip-address: ${GATEWAY_HOST:192.168.10.7}
         prefer-ip-address: true
         register: true
-        service-name: gateway-service
-      host: 100.65.49.16
+        service-name: ${spring.application.name}
+      host: localhost
       port: 8500
     gateway:
       discovery:
@@ -35,3 +39,8 @@ spring:
           predicates:
             - Path=/serviceuser/users/**
           uri: lb://service-user
+  config:
+    # consul kv get config/gateway-service.dev/data
+    import: optional:consul:localhost:8500
+  profiles:
+    active: dev
