@@ -1,4 +1,6 @@
 ---
+consul:
+  host: localhost
 management:
   endpoint:
     prometheus:
@@ -31,11 +33,16 @@ spring:
         healthCheckPath: /actuator/health
         register: true
         service-name: ${spring.application.name}
-      host: localhost
+      host: ${consul.host}
       port: 8500
   config:
     # consul kv get config/service-user.dev/data
-    import: optional:consul:localhost:8500
+    import: optional:consul:${consul.host}:8500
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${spring.datasource.password:}
+    url: ${spring.datasource.url:jdbc:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${spring.datasource.username:root}
   mybatis:
     configuration:
       map-underscore-to-camel-case: true
