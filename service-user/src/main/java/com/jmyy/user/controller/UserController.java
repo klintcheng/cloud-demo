@@ -7,7 +7,16 @@ package com.jmyy.user.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.jmyy.user.entity.User;
 import com.jmyy.user.service.UserService;
@@ -15,7 +24,7 @@ import com.jmyy.user.service.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -50,4 +59,5 @@ public class UserController {
         userService.deleteUser(id);
         return "User deleted successfully!";
     }
+
 }

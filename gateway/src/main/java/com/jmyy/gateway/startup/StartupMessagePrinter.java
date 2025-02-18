@@ -1,5 +1,6 @@
 package com.jmyy.gateway.startup;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,5 +15,7 @@ public class StartupMessagePrinter implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("启动配置消息: " + message);
+
     }
+
 }

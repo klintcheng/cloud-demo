@@ -6,23 +6,35 @@ spring:
     name: service-user
   cloud:
     consul:
+      config:
+        enabled: true
+        format: YAML
+        profileSeparator: .
+        watch:
+          delay: 10000
+          enabled: true
       discovery:
         enabled: true
         healthCheckInterval: 10s
         healthCheckPath: /actuator/health
-        ip-address: ${GATEWAY_HOST:192.168.10.7}
+        # ip-address: ${GATEWAY_HOST:192.168.10.7}
         register: true
-        service-name: service-user
-      host: 100.65.49.16
+        service-name: ${spring.application.name}
+      host: localhost
       port: 8500
+  config:
+    # consul kv get config/service-user.dev/data
+    import: optional:consul:localhost:8500
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: kai2088go
-    url: jdbc:mysql://100.65.49.16:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    password: 123456
+    url: jdbc:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root
   mybatis:
     configuration:
       map-underscore-to-camel-case: true
+  profiles:
+    active: dev
 springdoc:
   api-docs:
     enabled: true
@@ -32,4 +44,4 @@ springdoc:
     version: 1.0.0
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html    # mapper-locations: classpath:mapper/*.xml
+    path: /swagger-ui.html

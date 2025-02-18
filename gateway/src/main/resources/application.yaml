@@ -18,6 +18,9 @@ spring:
         enabled: true
         format: YAML
         profileSeparator: .
+        watch:
+          delay: 10000
+          enabled: true
       discovery:
         enabled: true
         healthCheckInterval: 10s
