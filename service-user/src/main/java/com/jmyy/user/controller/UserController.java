@@ -7,8 +7,8 @@ package com.jmyy.user.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,10 +48,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
-        userService.updateUser(user);
-        return "User updated successfully!";
+        if (userService.updateUser(user) == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("id not exist");
+        }
+        return ResponseEntity.ok("User updated successfully!");
     }
 
     @DeleteMapping("/{id}")
