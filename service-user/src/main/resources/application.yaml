@@ -1,4 +1,16 @@
 ---
+management:
+  endpoint:
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 server:
   port: 8081
 spring:
@@ -17,7 +29,6 @@ spring:
         enabled: true
         healthCheckInterval: 10s
         healthCheckPath: /actuator/health
-        # ip-address: ${GATEWAY_HOST:192.168.10.7}
         register: true
         service-name: ${spring.application.name}
       host: localhost
@@ -25,11 +36,6 @@ spring:
   config:
     # consul kv get config/service-user.dev/data
     import: optional:consul:localhost:8500
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 123456
-    url: jdbc:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
   mybatis:
     configuration:
       map-underscore-to-camel-case: true
