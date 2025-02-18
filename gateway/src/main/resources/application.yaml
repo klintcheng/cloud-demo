@@ -40,7 +40,7 @@ spring:
             - RewritePath=/serviceuser/(?<segment>.*), /${segment}
           id: service-user
           predicates:
-            - Path=/serviceuser/users/**
+            - Path=/serviceuser/**
           uri: lb://service-user
   config:
     # consul kv get config/gateway-service.dev/data
