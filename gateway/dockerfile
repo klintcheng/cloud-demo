@@ -5,17 +5,15 @@ FROM maven:3.9.4-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # 复制父 pom.xml 和子模块 pom.xml
-COPY pom.xml .
-COPY gateway/pom.xml ./gateway/pom.xml
+COPY ../pom.xml .
+COPY pom.xml ./gateway/pom.xml
 
 # 先安装父 POM 到本地仓库
 RUN mvn clean install -N
 
 # 复制源代码
-COPY gateway/src ./gateway/src
+COPY src ./gateway/src
 
-# 构建子模块
-RUN mvn clean package -pl gateway -am -DskipTests
 # 使用 Maven 构建项目，生成 JAR 文件
 RUN mvn clean package -pl gateway -am -DskipTests
 

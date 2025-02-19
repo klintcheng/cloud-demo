@@ -19,6 +19,7 @@
         <module>gateway-service</module>
         <module>service-user</module>
         <module>service-order</module>
+        <module>common-api</module>
     </modules>
 
     <properties>
