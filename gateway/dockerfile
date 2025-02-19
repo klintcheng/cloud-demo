@@ -8,6 +8,9 @@ WORKDIR /app
 COPY ../pom.xml .
 COPY pom.xml ./gateway/pom.xml
 
+# 先安装父 POM 到本地仓库
+RUN mvn clean install -N
+
 # 复制源代码
 COPY src ./gateway/src
 
