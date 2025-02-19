@@ -21,7 +21,7 @@ jobs:
       # Step 4: Build Docker image for GitHub Container Registry
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/cloud-demo-gateway:latest ./gateway
+          docker build -t ghcr.io/${{ github.repository_owner }}/cloud-demo-gateway:latest -f gateway/Dockerfile gateway
 
        # Step 3: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
