@@ -16,9 +16,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>common-api</module>
         <module>gateway</module>
         <module>service-user</module>
-        <module>common-api</module>
     </modules>
 
     <properties>
