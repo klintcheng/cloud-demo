@@ -1,5 +1,5 @@
 # 使用 Maven 镜像来构建应用
-FROM maven:3.8.6-openjdk-21-slim AS build
+FROM maven:3.9.4-eclipse-temurin-21-alpine AS build
 
 # 设置工作目录
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY src /app/src/
 RUN mvn clean package -DskipTests
 
 # 使用轻量级的 OpenJDK 镜像来运行应用
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-alpine
 
 # 设置工作目录
 WORKDIR /app
