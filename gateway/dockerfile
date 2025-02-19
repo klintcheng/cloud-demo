@@ -14,7 +14,7 @@ COPY src /app/gateway/src/
 WORKDIR /app/gateway
 
 # 使用 Maven 构建项目，生成 JAR 文件
-RUN mvn clean package -DskipTests
+RUN mvn clean install -DskipTests
 
 # 使用轻量级的 OpenJDK 镜像来运行应用
 FROM eclipse-temurin:21-alpine
