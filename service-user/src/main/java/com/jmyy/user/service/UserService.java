@@ -45,16 +45,16 @@ public class UserService {
     // @Cacheable(value = "userCache", key = "#user.id", sync = true)
     @Cacheable("userCache")
     public User getUserById(Long id) {
-        return userMapper.selectUserById(id);
+        return userMapper.selectById(id);
     }
 
     public List<User> getAllUsers() {
-        return userMapper.getUsersByPage(1, 10);
+        return userMapper.selectList(null);
     }
 
     @CacheEvict(value = "userCache", key = "#user.id")
     public int updateUser(User user) {
-        return userMapper.updateUser(user);
+        return userMapper.updateById(user);
     }
 
     public int deleteUser(Long id) {

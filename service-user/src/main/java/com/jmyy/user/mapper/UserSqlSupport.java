@@ -11,7 +11,8 @@ import org.mybatis.dynamic.sql.AliasableSqlTable;
 import org.mybatis.dynamic.sql.SqlColumn;
 
 // 创建 UserDynamicSqlSupport 类
-public final class UserDynamicSqlSupport {
+// https://mybatis.org/mybatis-dynamic-sql/docs/introduction.html
+public final class UserSqlSupport {
 
     // 定义表名
     public static final User user = new User();

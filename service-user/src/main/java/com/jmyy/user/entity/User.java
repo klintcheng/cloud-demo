@@ -8,9 +8,12 @@ package com.jmyy.user.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import lombok.Data;
 
 @Data
+@TableName("user")
 public class User implements Serializable {
     private Long id;
     private String nickname;

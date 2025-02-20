@@ -23,9 +23,14 @@ config/application/
 ```
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     password: 123456
     url: jdbc:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000
 ```
 
 ### 添加服务的配置

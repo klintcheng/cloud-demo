@@ -5,75 +5,41 @@
 
 package com.jmyy.user.mapper;
 
+import static com.jmyy.user.mapper.UserSqlSupport.createdAt;
+import static com.jmyy.user.mapper.UserSqlSupport.email;
+import static com.jmyy.user.mapper.UserSqlSupport.id;
+import static com.jmyy.user.mapper.UserSqlSupport.nickname;
+import static com.jmyy.user.mapper.UserSqlSupport.phone;
+import static com.jmyy.user.mapper.UserSqlSupport.user;
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.mybatis.dynamic.sql.SqlBuilder;
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
-import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
-import org.mybatis.dynamic.sql.select.SelectDSL;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
-import org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper;
+import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.CommonSelectMapper;
 import org.mybatis.dynamic.sql.util.mybatis3.CommonUpdateMapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jmyy.user.entity.User;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.createdAt;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.email;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.id;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.nickname;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.password;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.phone;
-import static com.jmyy.user.mapper.UserDynamicSqlSupport.user;
 
 @Mapper
-public interface UserMapper extends CommonInsertMapper<User>, CommonSelectMapper, CommonUpdateMapper {
+public interface UserMapper extends BaseMapper<User>, CommonSelectMapper, CommonUpdateMapper {
 
-    default int insert(User u) {
-        InsertStatementProvider<User> insertStatement = SqlBuilder.insert(u)
-                .into(user)
-                .map(nickname).toProperty("nickname")
-                .map(password).toProperty("password")
-                .map(email).toProperty("email")
-                .map(createdAt).toProperty("createdAt")
-                .build()
-                .render(RenderingStrategies.MYBATIS3);
-
-        return insert(insertStatement);
-    }
-
-    default User selectUserById(Long id) {
-        // 构建 SelectStatementProvider
-        SelectStatementProvider selectStatement = SelectDSL.select(user.id, nickname, email)
-                .from(user)
-                .where(user.id, isEqualTo(id))
-                .build()
-                .render(RenderingStrategies.MYBATIS3);
-
-        return selectOne(selectStatement, row -> {
-            User user = new User();
-            user.setId((Long) row.get("id"));
-            user.setNickname((String) row.get("nickname"));
-            user.setEmail((String) row.get("email"));
-            return user;
-        });
-    }
-
-    // 更新用户
-    // @UpdateProvider(type = SqlProviderAdapter.class, method = "update")
-    default int updateUser(User u) {
+    // 更新用户name
+    @UpdateProvider(type = SqlProviderAdapter.class, method = "update")
+    default int updateUserName(long uid, String name) {
         UpdateStatementProvider updateStatement;
         updateStatement = SqlBuilder.update(user)
-                .set(nickname).equalToWhenPresent(u.getNickname())
-                .set(email).equalToWhenPresent(u.getEmail())
-                .set(phone).equalToWhenPresent(u.getPhone())
-                .set(password).equalToWhenPresent(u.getPassword())
-                .set(createdAt).equalToWhenPresent(u.getCreatedAt())
-                .where(id, isEqualTo(u.getId()))
+                .set(nickname).equalToWhenPresent(name)
+                .where(id, isEqualTo(uid))
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
 
@@ -86,7 +52,7 @@ public interface UserMapper extends CommonInsertMapper<User>, CommonSelectMapper
         SelectStatementProvider selectStatement = SqlBuilder.select(id, nickname, email, phone, createdAt)
                 .from(user)
                 .orderBy(id.descending()) // 按 id 倒序排列
-                .limit(pageSize) // 设置分页大小
+                .limit(pageSize) // 设置分页大小Í
                 .offset(offset) // 设置偏移量
                 .build()
                 .render(RenderingStrategies.MYBATIS3);

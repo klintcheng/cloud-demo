@@ -24,3 +24,10 @@ INSERT INTO user (nickname, email, phone, password, created_at) VALUES
 ('JohnDoe13', 'john13@example.com', '1234567802', 'password13', NOW()),
 ('JohnDoe14', 'john14@example.com', '1234567803', 'password14', NOW()),
 ('JohnDoe15', 'john15@example.com', '1234567804', 'password15', NOW());
+
+
+CREATE TABLE role (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    role_name VARCHAR(255) NOT NULL
+);
