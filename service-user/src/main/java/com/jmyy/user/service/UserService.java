@@ -8,12 +8,18 @@ package com.jmyy.user.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.swing.Spring;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import com.jmyy.user.entity.User;
 import com.jmyy.user.mapper.UserMapper;
 
 @Service
+@EnableCaching
 public class UserService {
     private final UserMapper userMapper;
 
@@ -26,6 +32,18 @@ public class UserService {
         return userMapper.insert(u);
     }
 
+    // 1、Spring 支持在 key 属性中使用 SpEL 表达式来动态生成缓存键
+    // @Cacheable(value = "userCache", key = "#user.id + '-' + #user.name")
+    // 2、使用 condition 和 unless 属性可以在某些条件下启用或禁用缓存。
+    // - condition：只有当条件表达式为 true 时，才会执行缓存。
+    // - unless：只有当条件表达式为 true 时，才会阻止缓存。
+    // @Cacheable(value = "userCache", key = "#user.id", condition = "#user.id >
+    // 10") 只有 user.id > 10 时才会缓存。
+    // @Cacheable(value = "userCache", key = "#user.id", unless = "#result == null")
+    // 如果返回值为 null，则不缓存。
+    // 3、Spring Cache 支持缓存的同步锁，防止在缓存未命中时，多个线程同时访问数据库。在缓存未命中的情况下，默认会进行加锁，直到缓存填充完毕。
+    // @Cacheable(value = "userCache", key = "#user.id", sync = true)
+    @Cacheable("userCache")
     public User getUserById(Long id) {
         return userMapper.selectUserById(id);
     }
@@ -34,6 +52,7 @@ public class UserService {
         return userMapper.getUsersByPage(1, 10);
     }
 
+    @CacheEvict(value = "userCache", key = "#user.id")
     public int updateUser(User user) {
         return userMapper.updateUser(user);
     }
