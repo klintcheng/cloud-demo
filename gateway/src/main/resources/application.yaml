@@ -1,6 +1,4 @@
 ---
-consul:
-  host: localhost
 logging:
   level:
     org.springframework.cloud.consul: DEBUG
@@ -38,7 +36,7 @@ spring:
         prefer-ip-address: true
         register: true
         service-name: ${spring.application.name}
-      host: ${consul.host}
+      host: localhost
       port: 8500
     gateway:
       discovery:
@@ -53,6 +51,6 @@ spring:
           uri: lb://service-user
   config:
     # consul kv get config/gateway-service.dev/data
-    import: optional:consul:${consul.host}:8500
+    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
   profiles:
     active: dev

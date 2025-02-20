@@ -1,6 +1,4 @@
 ---
-consul:
-  host: localhost
 management:
   endpoint:
     prometheus:
@@ -33,11 +31,10 @@ spring:
         healthCheckPath: /actuator/health
         register: true
         service-name: ${spring.application.name}
-      host: ${consul.host}
+      host: localhost
       port: 8500
   config:
-    # consul kv get config/service-user.dev/data
-    import: optional:consul:${consul.host}:8500
+    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: ${spring.datasource.password:}
