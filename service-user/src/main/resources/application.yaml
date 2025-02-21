@@ -38,7 +38,7 @@ spring:
   config:
     import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     password: ${spring.datasource.password:}
     url: ${spring.datasource.url:jdbc:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true}
     username: ${spring.datasource.username:root}

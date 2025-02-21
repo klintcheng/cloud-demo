@@ -5,10 +5,12 @@
 
 package com.jmyy.user.controller;
 
-import java.util.List;
+import java.time.Duration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jmyy.api.dto.user.UserDTO;
 import com.jmyy.user.entity.User;
 import com.jmyy.user.service.UserService;
@@ -31,6 +34,8 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -53,18 +58,26 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping("/{page}/{size}")
+    public Page<User> getUsers(@PathVariable int page, @PathVariable int size) {
+        return userService.getPageUsers(page, size);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto) {
+        // 限流, 操作 redis 示例
+        ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
+        if (valueOps.get("user:" + id) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("too many requests");
+        }
+
         User user = modelMapper.map(userDto, User.class);
         user.setId(id);
         if (userService.updateUser(user) == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("id not exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id not exist");
         }
+        valueOps.set("user:" + id, 1, Duration.ofSeconds(30));
+
         return ResponseEntity.ok("User updated successfully!");
     }
 
