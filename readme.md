@@ -20,17 +20,18 @@ config/application/
 
 比如把 db ,redis 之类的配置完成。
 
-```
+```sh
+consul kv put config/application.dev/data "
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     password: 123456
-    url: jdbc:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:p6spy:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root
   redis:
     host: localhost
     port: 6379
-    timeout: 2000
+    timeout: 2000"
 ```
 
 ### 添加服务的配置
@@ -38,3 +39,10 @@ spring:
 服务默认的配置 key，以 dev环境为例:
 
 > config/service-user.dev/data
+
+```sh
+consul kv put config/service-user.dev/data "
+---
+custom:
+  message: hello local"
+```
