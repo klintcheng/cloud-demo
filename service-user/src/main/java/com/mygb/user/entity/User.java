@@ -7,9 +7,6 @@ package com.mygb.user.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.data.annotation.Transient;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -25,6 +22,4 @@ public class User implements Serializable {
     private String password;
     private LocalDateTime createdAt;
 
-    @Transient
-    private List<Role> roles;
 }

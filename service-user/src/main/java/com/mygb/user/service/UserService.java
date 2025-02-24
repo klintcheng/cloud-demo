@@ -7,6 +7,7 @@ package com.mygb.user.service;
 
 import java.time.LocalDateTime;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,18 +16,13 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mygb.user.entity.Role;
 import com.mygb.user.entity.User;
-import com.mygb.user.mapper.RoleMapper;
 import com.mygb.user.mapper.UserMapper;
 
 @Service
 @EnableCaching
 public class UserService {
     private final UserMapper userMapper;
-
-    @Autowired
-    private RoleMapper roleMapper;
 
     public UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
@@ -51,9 +47,6 @@ public class UserService {
     @Cacheable("userCache")
     public User getUserById(Long id) {
         User user = userMapper.selectById(id);
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", id); // where user_id = #{id},
-        user.setRoles(roleMapper.selectList(queryWrapper));
         return user;
     }
 

@@ -1,6 +1,7 @@
 package com.mygb.api.dto.user;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,4 +14,7 @@ public class UserDTO {
     private String phone;
     private String password;
     private LocalDateTime createdAt;
+
+    private List<String> roles;
+
 }

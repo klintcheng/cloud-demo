@@ -6,6 +6,7 @@
 package com.mygb.user.controller;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mygb.api.dto.user.UserDTO;
+import com.mygb.user.entity.Role;
 import com.mygb.user.entity.User;
+import com.mygb.user.mapper.RoleMapper;
 import com.mygb.user.service.UserService;
 
 @RestController
@@ -34,6 +38,10 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
+
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 
@@ -54,8 +62,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public UserDTO getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", id); // where user_id = #{id},
+        List<Role> roles = roleMapper.selectList(queryWrapper);
+        userDTO.setRoles(roles.stream().map(Role::getRoleName).toList());
+
+        return userDTO;
     }
 
     @GetMapping("/{page}/{size}")
