@@ -1,4 +1,4 @@
-package com.jmyy.user.config;
+package com.mygb.user.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

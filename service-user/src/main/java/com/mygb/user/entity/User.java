@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.jmyy.user.entity;
+package com.mygb.user.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

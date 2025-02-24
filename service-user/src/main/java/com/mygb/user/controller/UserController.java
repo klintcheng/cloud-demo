@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.jmyy.user.controller;
+package com.mygb.user.controller;
 
 import java.time.Duration;
 
@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jmyy.api.dto.user.UserDTO;
-import com.jmyy.user.entity.User;
-import com.jmyy.user.service.UserService;
+import com.mygb.api.dto.user.UserDTO;
+import com.mygb.user.entity.User;
+import com.mygb.user.service.UserService;
 
 @RestController
 @RequestMapping("/users")

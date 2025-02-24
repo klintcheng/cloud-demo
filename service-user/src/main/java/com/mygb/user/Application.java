@@ -1,4 +1,4 @@
-package com.jmyy.user;
+package com.mygb.user;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;

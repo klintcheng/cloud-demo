@@ -1,4 +1,4 @@
-package com.jmyy.gateway.startup;
+package com.mygb.gateway.startup;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;

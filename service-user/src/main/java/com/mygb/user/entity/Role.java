@@ -1,4 +1,4 @@
-package com.jmyy.user.entity;
+package com.mygb.user.entity;
 
 import java.io.Serializable;
 

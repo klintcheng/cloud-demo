@@ -1,4 +1,4 @@
-package com.jmyy.api.dto.user;
+package com.mygb.api.dto.user;
 
 import java.time.LocalDateTime;
 

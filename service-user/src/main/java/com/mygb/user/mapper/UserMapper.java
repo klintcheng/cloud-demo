@@ -3,14 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.jmyy.user.mapper;
+package com.mygb.user.mapper;
 
-import static com.jmyy.user.mapper.UserSqlSupport.createdAt;
-import static com.jmyy.user.mapper.UserSqlSupport.email;
-import static com.jmyy.user.mapper.UserSqlSupport.id;
-import static com.jmyy.user.mapper.UserSqlSupport.nickname;
-import static com.jmyy.user.mapper.UserSqlSupport.phone;
-import static com.jmyy.user.mapper.UserSqlSupport.user;
+import static com.mygb.user.mapper.UserSqlSupport.createdAt;
+import static com.mygb.user.mapper.UserSqlSupport.email;
+import static com.mygb.user.mapper.UserSqlSupport.id;
+import static com.mygb.user.mapper.UserSqlSupport.nickname;
+import static com.mygb.user.mapper.UserSqlSupport.phone;
+import static com.mygb.user.mapper.UserSqlSupport.user;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import org.mybatis.dynamic.sql.util.mybatis3.CommonSelectMapper;
 import org.mybatis.dynamic.sql.util.mybatis3.CommonUpdateMapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jmyy.user.entity.User;
+import com.mygb.user.entity.User;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User>, CommonSelectMapper, CommonUpdateMapper {

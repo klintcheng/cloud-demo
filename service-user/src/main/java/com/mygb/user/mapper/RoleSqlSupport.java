@@ -1,4 +1,4 @@
-package com.jmyy.user.mapper;
+package com.mygb.user.mapper;
 
 import java.sql.JDBCType;
 
