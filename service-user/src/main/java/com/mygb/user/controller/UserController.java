@@ -78,14 +78,15 @@ public class UserController {
     }
 
     @GetMapping("/{page}/{size}")
-    public Page<UserRespDTO> getUsers(@PathVariable int page, @PathVariable int size) {
+    public Page<User> getUsers(@PathVariable int page, @PathVariable int size) {
         Page<User> pageUsers = userService.getPageUsers(page, size);
 
-        Page<UserRespDTO> pageUserRespDTO = new Page<>(page, size, pageUsers.getTotal());
-        List<UserRespDTO> records = pageUsers.getRecords().stream()
-                .map(user -> modelMapper.map(user, UserRespDTO.class)).toList();
-        pageUserRespDTO.setRecords(records);
-        return pageUserRespDTO;
+        // Page<UserRespDTO> pageUserRespDTO = new Page<>(page, size,
+        // pageUsers.getTotal());
+        // List<UserRespDTO> records = pageUsers.getRecords().stream()
+        // .map(user -> modelMapper.map(user, UserRespDTO.class)).toList();
+        // pageUserRespDTO.setRecords(records);
+        return pageUsers;
     }
 
     @PutMapping("/{id}")

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class User implements Serializable {
     private String nickname;
     private String email;
     private String phone;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private LocalDateTime createdAt;
 
