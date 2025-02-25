@@ -25,11 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mygb.api.dto.user.UserDTO;
+import com.mygb.api.dto.user.CreateUserDTO;
+import com.mygb.api.dto.user.UserRespDTO;
 import com.mygb.user.entity.Role;
 import com.mygb.user.entity.User;
 import com.mygb.user.mapper.RoleMapper;
 import com.mygb.user.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -50,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(@RequestBody UserDTO userDto) {
+    public String createUser(@Valid @RequestBody CreateUserDTO userDto) {
         // User user = new User();
         // user.setNickname(userDto.getNickname());
         // user.setEmail(userDto.getEmail());
@@ -62,9 +65,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
+    public UserRespDTO getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        UserRespDTO userDTO = modelMapper.map(user, UserRespDTO.class);
 
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", id); // where user_id = #{id},
@@ -80,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserRespDTO userDto) {
         // 限流, 操作 redis 示例
         ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
         if (valueOps.get("user:" + id) != null) {

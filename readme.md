@@ -11,6 +11,27 @@ docker run -d -p 8500:8500 --name=dev-consul -e CONSUL_BIND_INTERFACE=eth0 consu
 docker run -d -e CONSUL_BIND_INTERFACE=eth0 consul:1.15.4 agent -dev -join=172.17.0.2
 ```
 
+### start mysql
+
+```
+docker run -d \
+  --name mysql8 \
+  -e MYSQL_ROOT_PASSWORD=123456 \
+  -e MYSQL_DATABASE=springdemo \
+  -e MYSQL_PASSWORD=123456 \
+  -p 3306:3306 \
+  m.daocloud.io/docker.io/library/mysql:latest
+```
+
+### start redis
+
+```
+docker run -d \
+  --name redis \
+  -p 6379:6379 \
+  redis:latest
+```
+
 ```
 docker run -p 8080:8080 -d -e SPRING_CLOUD_CONSUL_HOST=192.168.31.207 gateway:latest
 
