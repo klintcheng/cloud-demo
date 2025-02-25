@@ -1,6 +1,21 @@
 
 # 系统
 
+
+## 启动依赖服务
+
+### start consul
+```sh
+docker run -d -p 8500:8500 --name=dev-consul -e CONSUL_BIND_INTERFACE=eth0 consul:1.15.4
+
+docker run -d -e CONSUL_BIND_INTERFACE=eth0 consul:1.15.4 agent -dev -join=172.17.0.2
+```
+
+```
+docker run -p 8080:8080 -d -e SPRING_CLOUD_CONSUL_HOST=192.168.31.207 gateway:latest
+
+```
+
 ## 配置
 
 springcloud 配置读取 consul 配置文件的优先级如下：
