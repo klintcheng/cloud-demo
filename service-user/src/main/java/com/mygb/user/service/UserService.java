@@ -7,20 +7,30 @@ package com.mygb.user.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mygb.user.entity.Role;
 import com.mygb.user.entity.User;
+import com.mygb.user.mapper.RoleMapper;
 import com.mygb.user.mapper.UserMapper;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 @EnableCaching
 public class UserService {
+
     private final UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
     public UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
@@ -44,8 +54,12 @@ public class UserService {
     // @Cacheable(value = "userCache", key = "#user.id", sync = true)
     @Cacheable("userCache")
     public User getUserById(Long id) {
-        User user = userMapper.selectById(id);
-        return user;
+        try {
+            User user = userMapper.selectById(id);
+            return user;
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public Page<User> getPageUsers(int current, int size) {
@@ -59,7 +73,19 @@ public class UserService {
         return userMapper.updateById(user);
     }
 
+    @Transactional
     public int deleteUser(Long id) {
-        return userMapper.delete(id);
+        int rows = userMapper.delete(id);
+        if (rows == 0) {
+            return 0;
+        }
+        // 删除用户后,清除roles
+        rows = roleMapper.delete(new QueryWrapper<Role>().eq("user_id", id));
+        log.atDebug().log("删除了 {} 条角色", rows);
+        if (rows == 0) {
+            // transactional 回滚
+            throw new RuntimeException("删除角色失败");
+        }
+        return 1;
     }
 }

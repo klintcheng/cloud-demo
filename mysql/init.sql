@@ -31,3 +31,8 @@ CREATE TABLE role (
     user_id INT NOT NULL,
     role_name VARCHAR(255) NOT NULL
 );
+
+INSERT INTO role (user_id, role_name) VALUES (1, 'Admin');
+INSERT INTO role (user_id, role_name) VALUES (2, 'User');
+INSERT INTO role (user_id, role_name) VALUES (3, 'Guest');
+INSERT INTO role (user_id, role_name) VALUES (15, 'Moderator');

@@ -29,7 +29,7 @@ import com.mygb.api.dto.user.CreateUserDTO;
 import com.mygb.api.dto.user.UserRespDTO;
 import com.mygb.user.entity.Role;
 import com.mygb.user.entity.User;
-import com.mygb.user.mapper.RoleMapper;
+import com.mygb.user.service.RoleService;
 import com.mygb.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -43,7 +43,7 @@ public class UserController {
     private ModelMapper modelMapper;
 
     @Autowired
-    private RoleMapper roleMapper;
+    private RoleService roleService;
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
@@ -65,16 +65,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserRespDTO getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserRespDTO> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
         UserRespDTO userDTO = modelMapper.map(user, UserRespDTO.class);
+        userDTO.setRoles(roleService.getRolesByUserId(id));
 
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", id); // where user_id = #{id},
-        List<Role> roles = roleMapper.selectList(queryWrapper);
-        userDTO.setRoles(roles.stream().map(Role::getRoleName).toList());
-
-        return userDTO;
+        return ResponseEntity.ok(userDTO);
     }
 
     @GetMapping("/{page}/{size}")
@@ -109,7 +108,9 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+        if (userService.deleteUser(id) == 0) {
+            return "id not exist";
+        }
         return "User deleted successfully!";
     }
 

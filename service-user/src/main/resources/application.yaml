@@ -12,6 +12,8 @@ management:
       prometheus:
         enabled: true
 server:
+  error:
+    include-stacktrace: never
   port: 8081
 spring:
   application:
