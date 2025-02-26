@@ -29,11 +29,11 @@ import lombok.extern.log4j.Log4j2;
 public class UserService {
 
     private final UserMapper userMapper;
-    @Autowired
-    private RoleMapper roleMapper;
+    private final RoleMapper roleMapper;
 
-    public UserService(UserMapper userMapper) {
+    public UserService(UserMapper userMapper, RoleMapper roleMapper) {
         this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
     }
 
     public int createUser(User u) {
@@ -75,7 +75,7 @@ public class UserService {
 
     @Transactional
     public int deleteUser(Long id) {
-        int rows = userMapper.delete(id);
+        int rows = userMapper.deleteById(id);
         if (rows == 0) {
             return 0;
         }
