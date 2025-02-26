@@ -1,19 +1,37 @@
 
-# 系统
+# 1. 系统
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [1. 系统](#1-系统)
+  - [1.1. 启动依赖服务](#11-启动依赖服务)
+    - [1.1.1. start consul](#111-start-consul)
+    - [1.1.2. start mysql](#112-start-mysql)
+    - [1.1.3. start redis](#113-start-redis)
+    - [1.1.4. start gateway](#114-start-gateway)
+  - [1.2. 配置](#12-配置)
+    - [1.2.1. 初始化数据](#121-初始化数据)
+  - [1.3. run service](#13-run-service)
+
+<!-- /code_chunk_output -->
 
 
-## 启动依赖服务
 
-### start consul
+## 1.1. 启动依赖服务
+
+### 1.1.1. start consul
+
 ```sh
 docker run -d -p 8500:8500 --name=dev-consul -e CONSUL_BIND_INTERFACE=eth0 consul:1.15.4
 
-docker run -d -e CONSUL_BIND_INTERFACE=eth0 consul:1.15.4 agent -dev -join=172.17.0.2
+# docker run -d -e CONSUL_BIND_INTERFACE=eth0 consul:1.15.4 agent -dev -join=172.17.0.2
 ```
 
-### start mysql
+### 1.1.2. start mysql
 
-```
+```sh
 docker run -d \
   --name mysql8 \
   -e MYSQL_ROOT_PASSWORD=123456 \
@@ -23,25 +41,29 @@ docker run -d \
   m.daocloud.io/docker.io/library/mysql:latest
 ```
 
-### start redis
+### 1.1.3. start redis
 
-```
+```sh
 docker run -d \
   --name redis \
   -p 6379:6379 \
   redis:latest
 ```
 
-```
+### 1.1.4. start gateway
+
+首先生成本地镜像，也可以不用docker启动，直接代码启动网关服务。
+
+```sh
 docker run -p 8080:8080 -d -e SPRING_CLOUD_CONSUL_HOST=192.168.31.207 gateway:latest
 
 ```
 
-## 配置
+## 1.2. 配置
 
 springcloud 配置读取 consul 配置文件的优先级如下：
 
-```
+```sh
 config/testApp,dev/
 config/testApp/
 config/application,dev/
@@ -49,36 +71,14 @@ config/application/
 ```
 因此，通过application加环境变量可以配置全局配置。
 
-### 添加环境全局配置。
+### 1.2.1. 初始化数据
 
-以开发环境为例，consul 中配置如下 key:
-> **config/application.dev/data**
+1. 执行 shell/consul.sh  会初始化配置
+2. 执行 shell/init.sql  初始化表和数据
 
-比如把 db ,redis 之类的配置完成。
-
-```sh
-consul kv put config/application.dev/data "
-spring:
-  datasource:
-    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-    password: 123456
-    url: jdbc:p6spy:mysql://localhost:3306/springdemo?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-  redis:
-    host: localhost
-    port: 6379
-    timeout: 2000"
-```
-
-### 添加服务的配置
-
-服务默认的配置 key，以 dev环境为例:
-
-> config/service-user.dev/data
+## 1.3. run service
 
 ```sh
-consul kv put config/service-user.dev/data "
----
-custom:
-  message: hello local"
+> cd service-user
+> mvn spring-boot:run
 ```
