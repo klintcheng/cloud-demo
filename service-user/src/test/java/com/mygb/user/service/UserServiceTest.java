@@ -2,7 +2,6 @@ package com.mygb.user.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,8 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mygb.user.entity.Role;
 import com.mygb.user.entity.User;
 import com.mygb.user.mapper.RoleMapper;
 import com.mygb.user.mapper.UserMapper;
